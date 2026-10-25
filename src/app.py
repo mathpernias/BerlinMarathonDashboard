@@ -24,7 +24,7 @@ import preprocess
 
 # Initialisation de l'application Dash
 app = dash.Dash(__name__)
-app.title = 'Project | INF8808'
+app.title = 'Berlin Marathon Dashboard'
 
 
 df_temp,df_preci=preprocess.preprocess_meteo(pd.read_csv('./src/assets/data/Berlin_Marathon_weather_data_since_1974.csv'))
@@ -68,26 +68,24 @@ app.layout = html.Div([
                 "animation": "fadeInDown 1s"
             }
         )
-    ], style={"text-align": "center"}),
+    ], className="hero-header"),
 
     # Phrase explicative
     html.P(
-        "Le marathon de Berlin est un grand marathon européen. Au fil des éditions, les courreurs sont devenus plus meilleurs et plus nombreux.\n"
-        "Mais comment se comparent les courreurs face à la température ou la pluie. L'impact de ces facteurs, est-il le même pour tout le monde?\n"
-        "Explorez ces données à travers des visualisations interactives. "
-        "Sélectionnez des plages de temps, des catégories ou des genres pour analyser les performances des coureurs.",
-        style={
-            "text-align": "center",
-            "font-size": "16px",
-            "margin-bottom": "30px",
-            "color": "#555",
-            "animation": "fadeInUp 1s"
-        }
+        "Explorez 25 éditions du Marathon de Berlin à travers les performances, la météo, les nationalités et les profils des coureurs.",
+        className="intro-copy"
     ),
+
+    html.Div([
+        html.Div([html.Span("25", className="metric-value"), html.Span("éditions analysées", className="metric-label")], className="metric-card"),
+        html.Div([html.Span("1999–2023", className="metric-value metric-value--wide"), html.Span("période couverte", className="metric-label")], className="metric-card"),
+        html.Div([html.Span(f"{total_participants:,}".replace(",", " "), className="metric-value"), html.Span("participants", className="metric-label")], className="metric-card"),
+        html.Div([html.Span(avg_finish_time[:5], className="metric-value"), html.Span("temps moyen", className="metric-label")], className="metric-card")
+    ], className="metric-strip"),
 
     # Onglets pour les visualisations
     dcc.Tabs([
-        dcc.Tab(label="Temps moyen indexé et météo (Visualisation 1)", children=[
+        dcc.Tab(label="Temps & météo", className="dashboard-tab", selected_className="dashboard-tab--active", children=[
             html.Div([
                 html.Div([
                     html.P(
@@ -231,7 +229,7 @@ app.layout = html.Div([
             ], style={"display": "flex", "flex-direction": "row"})
         ]),
 
-        dcc.Tab(label="Répartition par sexe et nationalité (Visualisation 2)", children=[
+        dcc.Tab(label="Sexe & nationalités", className="dashboard-tab", selected_className="dashboard-tab--active", children=[
             html.Div([
                 html.Div([
                     html.P(
@@ -297,7 +295,7 @@ app.layout = html.Div([
             ], style={"display": "flex", "flex-direction": "row", "justify-content": "left"})
         ]),
 
-        dcc.Tab(label="Évolution des nationalités dans le Top 10 (Visualisation 3)", children=[
+        dcc.Tab(label="Top 10 par nationalité", className="dashboard-tab", selected_className="dashboard-tab--active", children=[
             html.Div([
                 html.Div([
                     html.P(
@@ -524,8 +522,8 @@ app.layout = html.Div([
                 ], style={"flex": "4", "padding": "20px", "background-color": "#f9f9f9", "border-radius": "10px", "margin-left": "20px"})  # Increased flex ratio for the visualization
             ], style={"display": "flex", "flex-direction": "row"})
         ])
-    ])
-])
+    ], className="dashboard-tabs")
+], className="app-shell")
 
 
 # --- CALLBACKS POUR METTRE À JOUR LES VISUALISATIONS ---
