@@ -6,10 +6,14 @@ Ce projet propose des visualisations interactives des données du Marathon de Be
 
 ## Fonctionnalités
 
-- **Visualisation 1** : Analyse l'évolution des performances en fonctions des performances météo avec des graphes indéxés
-- **Visualisation 2** : Dashboard interactif pour explorer les répartitions par sexe et nationalité en fonction des temps d'arrivée.
-- **Visualisation 3** : Évolution des nationalités dans le top 10 du marathon, avec des filtres par genre et catégorie d'âge.
-- **Interactivité** : Sélectionnez des plages de temps ou des coureurs spécifiques pour afficher des détails personnalisés.
+Thème sombre « Berlin nocturne » (Instrument Serif · Inter · JetBrains Mono), palette de couleurs validée pour le daltonisme, entièrement responsive.
+
+- **Palmarès** : temps des vainqueurs hommes/femmes par édition, records du monde battus à Berlin et fiches des légendes.
+- **Ma course** ✦ : saisissez votre temps et découvrez votre classement, votre percentile, votre allure, vos passages et votre position dans la distribution — filtrable par sexe, édition et catégorie d'âge.
+- **Une édition** : explorateur année par année (finishers, part des femmes, médiane, météo, vainqueurs, distribution des arrivées).
+- **Temps & météo** : évolution des temps moyens indexés sur 1999, par niveau, sexe ou âge, face à la température et aux précipitations.
+- **Sexe & nations** : sélectionnez une plage de temps pour voir la répartition par sexe et les nationalités.
+- **Top 10** : nationalités du Top 10 par édition ; cliquez sur un coureur pour afficher son parcours à Berlin.
 
 ## Installation
 
@@ -29,9 +33,9 @@ Ce projet propose des visualisations interactives des données du Marathon de Be
 ## Utilisation
 
 1. Assurez-vous que les fichiers de données nécessaires (`marathon_df`, `years`) sont disponibles dans le module `data`.
-2. Lancez l'application Dash :
+2. Depuis la racine du dépôt, lancez l'application Dash :
    ```bash
-   python server.py
+   python src/app.py
    ```
 3. Ouvrez votre navigateur et accédez à `http://localhost:8050` pour interagir avec le tableau de bord.
 
