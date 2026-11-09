@@ -39,6 +39,23 @@ Thème sombre « Berlin nocturne » (Instrument Serif · Inter · JetBrains Mono
    ```
 3. Ouvrez votre navigateur et accédez à `http://localhost:8050` pour interagir avec le tableau de bord.
 
+## Déploiement gratuit (Hugging Face Spaces)
+
+GitHub Pages ne sert que des sites statiques ; un dashboard Dash a besoin d'un serveur Python.
+Hugging Face Spaces l'héberge gratuitement (16 Go de RAM, le dataset en occupe ~330 Mo) :
+
+1. Sur huggingface.co : **New Space** → SDK **Docker** → *Blank*.
+2. Dans l'onglet *Files*, téléverser les deux fichiers de `deploy/huggingface/`
+   (`README.md` et `Dockerfile`) à la racine du Space.
+3. Le Space clone ce dépôt GitHub au build et démarre l'app sur le port 7860.
+   Pour publier une nouvelle version : *Settings* → **Factory rebuild**.
+
+Le `Dockerfile` à la racine du dépôt fonctionne aussi pour Render, Koyeb ou en local :
+
+```bash
+docker build -t berlin-dash . && docker run -p 7860:7860 berlin-dash
+```
+
 ## Structure des fichiers
 
 - `app.py` : Contient la logique principale de l'application Dash.

@@ -1,1 +1,1 @@
-web: gunicorn code.src.app:app
+web: gunicorn --pythonpath src app:server --workers 1 --threads 4 --timeout 180
