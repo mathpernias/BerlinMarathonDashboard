@@ -1,0 +1,8 @@
+.git
+**/__pycache__
+*.pyc
+top_10_csvs
+MyBerlin_light.csv
+src/assets/data/MyBerlin_1999-2023.csv
+src/server.py
+deploy

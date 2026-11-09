@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import theme as T
 import preprocess
 from data import marathon_df, years
-from layout_vis3 import configure_layout
+from layout_vis3 import configure_layout, callout_target
 
 
 def generate_circle_points(center_x, center_y, count, radius=0.3):
@@ -77,6 +77,8 @@ def generate_marathon_chart(selected_gender="ALL", selected_runner=None, selecte
 
     pts = {g: {"x": [], "y": [], "text": [], "name": [], "op": [], "size": [], "line": []}
            for g in ("M", "W")}
+    anchors = {}  # (full_name, year) -> exact (x, y) of the dot, for callouts
+    target = callout_target(selected_category, selected_gender)
     for (year, nation), group in filtered_df.groupby(["year", "nation"]):
         group = group.sort_values(["gender", "relative_place"])
         xs, ys = generate_circle_points(year, nations_sorted.index(nation), len(group))
@@ -85,13 +87,15 @@ def generate_marathon_chart(selected_gender="ALL", selected_runner=None, selecte
             is_sel = selected_runner == row.full_name
             p["x"].append(xs[k])
             p["y"].append(ys[k])
+            anchors[(row.full_name, year)] = (float(xs[k]), float(ys[k]))
             p["name"].append(row.full_name)
             p["text"].append(f"<b>{row.prenom} {row.nom}</b><br>{nation} · {year}<br>"
                              f"{'Homme' if row.gender == 'M' else 'Femme'} · {row.relative_place}ᵉ"
                              f"<br>{pd.to_timedelta(row.tps_fin_p, unit='s')}".replace("0 days ", ""))
             p["op"].append(1.0 if is_sel else (0.12 if selected_runner else 0.85))
             p["size"].append(15 if is_sel else 9)
-            p["line"].append(T.GOLD if is_sel else T.SURFACE)
+            is_target = target == (row.full_name, year)
+            p["line"].append(T.GOLD if (is_sel or is_target) else T.SURFACE)
 
     for g, label, color in (("M", "Hommes", T.MEN), ("W", "Femmes", T.WOMEN)):
         p = pts[g]
@@ -117,16 +121,16 @@ def generate_marathon_chart(selected_gender="ALL", selected_runner=None, selecte
 
     fig.update_xaxes(showgrid=False, zeroline=False, tickvals=years,
                      ticktext=[f"’{str(y)[2:]}" for y in years],
-                     range=[years[0] - 0.6, years[-1] + 2.6])
+                     range=[years[0] - 0.6, years[-1] + 0.6])
     fig.update_yaxes(showgrid=False, zeroline=False, tickvals=list(range(len(nations_sorted))),
                      ticktext=nations_sorted, tickfont=dict(color=T.TEXT_2, size=12))
     fig.update_layout(
         height=max(420, 64 * len(nations_sorted) + 120),
-        margin=dict(l=110, r=16, t=40, b=40),
+        margin=dict(l=110, r=130, t=40, b=40),  # right margin hosts the callouts
         clickmode="event", hovermode="closest",
         legend=dict(y=1.02, x=0),
     )
-    return configure_layout(fig, nations_sorted, selected_category, selected_gender)
+    return configure_layout(fig, anchors, years[-1], selected_category, selected_gender)
 
 
 def top10_average_text(selected_gender, selected_category):
